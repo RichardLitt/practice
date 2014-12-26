@@ -1,0 +1,6 @@
+{
+  "journal": false,
+  "exercise": false,
+  "code": true,
+  "meditate": true
+}
