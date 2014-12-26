@@ -9,12 +9,12 @@ var argv = require('minimist')(process.argv.slice(2), {
         i: 'input',
         d: 'done',
         r: 'reset',
-        n: 'new'
+        n: 'new',
+        c: 'clear'
     }
-});
+})
 
 var inputFile = argv.input || path.join(__dirname, '..', 'practice.txt')
-
 var tasks = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
 
 function list () {
@@ -29,21 +29,37 @@ function list () {
 }
 
 function done (task) {
-  tasks[task] = true;
+  if (typeof task === 'string') task = [ task ]
+  for (var t in task) {
+    tasks[task[t]] = true
+  }
 }
 
-function reset () {
-  // TODO Reset tasks individually
-  for (var key in tasks) {
-    tasks[key] = false;
+function reset (task) {
+  if (typeof task === 'string') {
+    tasks[task] = false
+  } else {
+    for (var key in tasks) {
+      tasks[key] = false
+    }
   }
 }
 
 function newTask (task) {
-  tasks[task] = false;
+  if (typeof task === 'string') task = [ task ]
+  for (var t in task) {
+    tasks[task[t]] = false
+  }
 }
 
-if (argv.r) { reset(tasks) }
-if (argv.d) { done(argv.d) }
-if (argv.n) { newTask(argv.n) }
+function removeTask (task) {
+  delete tasks[task]
+}
+
+if (argv._) done(argv._)
+if (argv.r) reset(argv.r)
+if (argv.d) done(argv.d)
+if (argv.n) newTask(argv.n)
+if (argv.c) removeTask(argv.c)
+
 list()
