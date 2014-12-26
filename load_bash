@@ -2,4 +2,4 @@
 source ~/.bash_profile
 # script contents go here, with access to your normal PATH
 #
-node /usr/local/lib/node_modules/practice/index.js
+node /usr/local/lib/node_modules/practice/bin/index.js
