@@ -1,13 +1,24 @@
 {
   "name": "practice",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "bin": "bin/index.js"
   "description": "A simple way of printing a list of values, such as to do lists",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Richard Littauer",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/RichardLitt/practice.git"
+  },
+  "homepage": "https://github.com/RichardLitt/practice.git",
+  "keywords": [
+    "practice",
+    "to do",
+    "print values"
+  ],
+  "author": {
+    "name": "Richard Littauer",
+    "email": "richard.littauer@gmail.com",
+    "url": "http://burntfen.com"
+  },
   "dependencies": {
     "fs": "0.0.2",
     "minimist": "^1.1.0",

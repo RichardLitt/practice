@@ -13,7 +13,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     }
 });
 
-var inputFile = argv.input || path.join(__dirname, '.', 'practice.txt')
+var inputFile = argv.input || path.join(__dirname, '..', 'practice.txt')
 
 var tasks = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
 
