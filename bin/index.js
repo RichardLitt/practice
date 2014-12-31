@@ -10,7 +10,8 @@ var argv = require('minimist')(process.argv.slice(2), {
         d: 'done',
         r: 'reset',
         n: 'new',
-        c: 'clear'
+        e: 'erase',
+        w: 'wipe'
     }
 })
 
@@ -56,10 +57,17 @@ function removeTask (task) {
   delete tasks[task]
 }
 
+function wipeTasks() {
+  for (var task in tasks) {
+    tasks[task] = true
+  }
+}
+
 if (argv._) done(argv._)
 if (argv.r) reset(argv.r)
 if (argv.d) done(argv.d)
 if (argv.n) newTask(argv.n)
-if (argv.c) removeTask(argv.c)
+if (argv.e) removeTask(argv.e)
+if (argv.w) wipeTasks()
 
 list()

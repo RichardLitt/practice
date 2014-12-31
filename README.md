@@ -24,7 +24,8 @@ If arguments are not flagged, it will assume they are done and will mark them as
   -i, --input Specifies different input file
   -d, --done  Set value to true. If multiple times, sets all params to true.
   -n, --new   Create new item in the list. 
-  -c, --clear Remove the task from the list permanently
+  -e, --erase Remove the task from the list permanently
+  -w, --wipe  Mark all values as true
 ```
 
 
