@@ -19,7 +19,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 var inputFile = argv.input || path.join(__dirname, '..', 'practice.txt')
 var tasks = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
 
-function list(showAll) {
+function list (showAll) {
   for (var key in tasks) {
     if (tasks.hasOwnProperty(key)) {
       if (!tasks[key] || showAll) {
@@ -58,12 +58,18 @@ function removeTask (task) {
   delete tasks[task]
 }
 
-function wipeTasks() {
+function wipeTasks () {
   for (var task in tasks) {
     tasks[task] = true
   }
 }
 
+function usage () {
+    var rs = fs.createReadStream(__dirname + '/../README.md');
+    rs.pipe(process.stdout);
+}
+
+var showAll = argv.l
 
 if (argv._) done(argv._)
 if (argv.r) reset(argv.r)
@@ -71,8 +77,9 @@ if (argv.d) done(argv.d)
 if (argv.n) newTask(argv.n)
 if (argv.e) removeTask(argv.e)
 if (argv.w) wipeTasks()
+if (argv.h || argv.help) usage()
+else
+  list(showAll)
 
-var showAll = argv.l
 
-list(showAll)
 
