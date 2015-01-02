@@ -2,5 +2,6 @@
   "journal": false,
   "exercise": false,
   "code": false,
-  "meditate": false
+  "meditate": false,
+  "test": true
 }

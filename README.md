@@ -25,7 +25,8 @@ If arguments are not flagged, it will assume they are done and will mark them as
   -d, --done  Set value to true. If multiple times, sets all params to true.
   -n, --new   Create new item in the list. 
   -e, --erase Remove the task from the list permanently
-  -w, --wipe  Mark all values as true
+  -w, --wipe  Mark all values as true,
+  -l, --list  Show all values
 ```
 
 

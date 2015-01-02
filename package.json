@@ -1,6 +1,6 @@
 {
   "name": "practice",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "bin": "bin/index.js",
   "description": "A simple way of printing a list of values, such as to do lists",
   "license": "MIT",
