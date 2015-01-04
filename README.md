@@ -3,10 +3,11 @@ Practice
 
 > “Practice makes the master.” - Patrick Rothfuss, _The Name of the Wind_
 
-This is an attempt to have a daily to do list, which will display what hasn't
-been done today in the console.
+This is way of storing and using a  daily to do list, which will display what hasn't been done since the last reset in the console. It uses leveldb for storage.
 
-The goal would be that there are several tasks which ought to be done daily:
+### GeekTool 
+
+The idea is that there are several tasks which ought to be done daily:
 since I love a clean desktop, I print out these tasks (and these only) on the
 desktop using GeekTool and remove them as I complete them. I reset it daily.
 This way I am constantly reminded to practice.
@@ -35,5 +36,3 @@ returned output.
   -w, --wipe  Mark all values as true,
   -l, --list  Show all values
 ```
-
-

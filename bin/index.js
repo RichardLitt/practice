@@ -3,6 +3,8 @@
 
 var fs = require('fs')
 var path = require('path')
+var levelup = require('level')
+var _ = require('lodash')
 
 var argv = require('minimist')(process.argv.slice(2), {
     alias: {
@@ -16,60 +18,79 @@ var argv = require('minimist')(process.argv.slice(2), {
     }
 })
 
-var inputFile = argv.input || path.join(__dirname, '..', 'practice.txt')
-var tasks = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
+var db = levelup('./db', {valueEncoding: 'json'})
 
 function list (showAll) {
-  for (var key in tasks) {
-    if (tasks.hasOwnProperty(key)) {
-      if (!tasks[key] || showAll) {
-        console.log(key)
+  db.createReadStream()
+    .on('data', function(data) {
+      if (data.value === 'false' || showAll) {
+        console.log(data.key)
       }
-    }
-  }
-  fs.writeFileSync(inputFile, JSON.stringify(tasks, null, 2))
+    })
+    .on('error', function (err) {
+      console.log('Oh my!', err)
+    })
+    .on('close', function () {
+      db.close()
+    })
+}
+
+function save (task, value) {
+  value = value || 'false'
+  db.put(task, value, function(err) {
+    if (err) return console.log('Oops!', err) // Some kind of i/o error
+  })
 }
 
 function done (task) {
   if (typeof task === 'string') task = [ task ]
+
   for (var t in task) {
-    tasks[task[t]] = true
+    save(task[t], 'true')
   }
 }
 
 function reset (task) {
   if (typeof task === 'string') {
-    tasks[task] = false
+    db.put(task, 'false', function(err) {
+      if (err) return console.log('Failed to reset', task, err)
+    })
   } else {
-    for (var key in tasks) {
-      tasks[key] = false
-    }
+    db.createKeyStream()
+      .on('data', function (data) {
+        save(data, 'false')
+      })
   }
 }
 
 function newTask (task) {
   if (typeof task === 'string') task = [ task ]
+
   for (var t in task) {
-    tasks[task[t]] = false
+    save(task[t], 'false')
   }
 }
 
 function removeTask (task) {
-  delete tasks[task]
+  db.del(task, function (err) {
+    if (err) console.log('Failed to delete', err)
+  })
 }
 
 function wipeTasks () {
-  for (var task in tasks) {
-    tasks[task] = true
-  }
+  db.createKeyStream()
+    .on('data', function(data) {
+      save(data, 'true')
+    })
+    .on('close', function() {
+      list()
+    })
 }
 
 function usage () {
-    var rs = fs.createReadStream(__dirname + '/../README.md');
-    rs.pipe(process.stdout);
+    var rs = fs.createReadStream(__dirname + '/../README.md')
+    rs.pipe(process.stdout)
 }
-
-var showAll = argv.l
 
 if (argv._) done(argv._)
 if (argv.r) reset(argv.r)
@@ -78,8 +99,8 @@ if (argv.n) newTask(argv.n)
 if (argv.e) removeTask(argv.e)
 if (argv.w) wipeTasks()
 if (argv.h || argv.help) usage()
-else
-  list(showAll)
+if (argv.l) list(true)
+if (_.isEmpty(process.argv.slice(2))) list()
 
 
 

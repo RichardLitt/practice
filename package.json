@@ -1,8 +1,9 @@
 {
   "name": "practice",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "bin": "bin/index.js",
-  "description": "A simple way of printing a list of values, such as to do lists",
+  "description":
+    "A simple task manager and to do list using the console and leveldb",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -21,6 +22,8 @@
   },
   "dependencies": {
     "fs": "0.0.2",
+    "level": "^0.18.0",
+    "lodash": "^2.4.1",
     "minimist": "^1.1.0",
     "path": "^0.4.9"
   }
