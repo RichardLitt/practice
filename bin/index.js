@@ -18,6 +18,9 @@ var argv = require('minimist')(process.argv.slice(2), {
     }
 })
 
+var input = argv.i || (path.resolve(process.env['HOME'] || process.env['USERPROFILE'], '.practicedb'))
+var db = levelup(input, {valueEncoding: 'json'})
+
 if (argv._) done(argv._)
 if (argv.r) reset(argv.r)
 if (argv.d) done(argv.d)
@@ -29,8 +32,6 @@ if (argv.l) list(true)
 // Default
 if (_.isEmpty(process.argv.slice(2))) list()
 
-var input = argv.i || (path.resolve(process.env['HOME'] || process.env['USERPROFILE'], '.practicedb'))
-var db = levelup(input, {valueEncoding: 'json'})
 
 function list (showAll) {
   db.createReadStream()
@@ -50,11 +51,8 @@ function list (showAll) {
 function save (task, value) {
   value = value || 'false'
   db.put(task, value, function(err) {
-    if (err) {
-      return console.log('Failed to save ' + task + 'as ' + value + '!', err)
-    } else {
-      return console.log('Saved' + task + 'as' + value + '.');
-    }
+    if (err)
+      return console.log('Failed to save ' + task + ' as ' + value + '!', err)
   })
 }
 
@@ -63,6 +61,7 @@ function done (task) {
 
   for (var t in task) {
     save(task[t], 'true')
+    console.log('Practiced %s.', task[t]);
   }
 }
 
@@ -76,6 +75,7 @@ function reset (task) {
     db.createKeyStream()
       .on('data', function (data) {
         save(data, 'false')
+        console.log('Reset %s.', data);
       })
   }
 }
@@ -85,13 +85,14 @@ function newTask (task) {
 
   for (var t in task) {
     save(task[t], 'false')
+    console.log('Added %s.', task[t]);
   }
 }
 
 function removeTask (task) {
   db.del(task, function (err) {
     if (err) { console.log('Failed to delete', err) }
-    else { console.log('Deleted ' + task + '.'); }
+    else { console.log('Deleted %s.', task); }
   })
 }
 
@@ -99,6 +100,7 @@ function wipeTasks () {
   db.createKeyStream()
     .on('data', function(data) {
       save(data, 'true')
+      console.log('Wiped %s.', data);
     })
     .on('close', function() {
       list()
