@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
 var fs = require('fs')
 var path = require('path')
@@ -18,7 +18,19 @@ var argv = require('minimist')(process.argv.slice(2), {
     }
 })
 
-var db = levelup(path.resolve(process.env.HOME, '.practicedb'), {valueEncoding: 'json'})
+if (argv._) done(argv._)
+if (argv.r) reset(argv.r)
+if (argv.d) done(argv.d)
+if (argv.n) newTask(argv.n)
+if (argv.e) removeTask(argv.e)
+if (argv.w) wipeTasks()
+if (argv.h || argv.help) usage()
+if (argv.l) list(true)
+// Default
+if (_.isEmpty(process.argv.slice(2))) list()
+
+var input = argv.i || (path.resolve(process.env['HOME'] || process.env['USERPROFILE'], '.practicedb'))
+var db = levelup(input, {valueEncoding: 'json'})
 
 function list (showAll) {
   db.createReadStream()
@@ -28,7 +40,7 @@ function list (showAll) {
       }
     })
     .on('error', function (err) {
-      console.log('Oh my!', err)
+      console.log('Error listing!', err)
     })
     .on('close', function () {
       db.close()
@@ -38,7 +50,11 @@ function list (showAll) {
 function save (task, value) {
   value = value || 'false'
   db.put(task, value, function(err) {
-    if (err) return console.log('Oops!', err) // Some kind of i/o error
+    if (err) {
+      return console.log('Failed to save ' + task + 'as ' + value + '!', err)
+    } else {
+      return console.log('Saved' + task + 'as' + value + '.');
+    }
   })
 }
 
@@ -53,7 +69,8 @@ function done (task) {
 function reset (task) {
   if (typeof task === 'string') {
     db.put(task, 'false', function(err) {
-      if (err) return console.log('Failed to reset', task, err)
+      if (err) { return console.log('Failed to reset', task, err) }
+      else { return console.log('Reset ' + task + '.'); }
     })
   } else {
     db.createKeyStream()
@@ -73,7 +90,8 @@ function newTask (task) {
 
 function removeTask (task) {
   db.del(task, function (err) {
-    if (err) console.log('Failed to delete', err)
+    if (err) { console.log('Failed to delete', err) }
+    else { console.log('Deleted ' + task + '.'); }
   })
 }
 
@@ -91,16 +109,3 @@ function usage () {
     var rs = fs.createReadStream(__dirname + '/../README.md')
     rs.pipe(process.stdout)
 }
-
-if (argv._) done(argv._)
-if (argv.r) reset(argv.r)
-if (argv.d) done(argv.d)
-if (argv.n) newTask(argv.n)
-if (argv.e) removeTask(argv.e)
-if (argv.w) wipeTasks()
-if (argv.h || argv.help) usage()
-if (argv.l) list(true)
-if (_.isEmpty(process.argv.slice(2))) list()
-
-
-
