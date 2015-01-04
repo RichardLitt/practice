@@ -18,7 +18,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     }
 })
 
-var db = levelup('./db', {valueEncoding: 'json'})
+var db = levelup(path.resolve(process.env.HOME, '.practicedb'), {valueEncoding: 'json'})
 
 function list (showAll) {
   db.createReadStream()
