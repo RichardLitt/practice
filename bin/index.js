@@ -72,10 +72,12 @@ function reset (task) {
       else { return console.log('Reset ' + task + '.'); }
     })
   } else {
-    db.createKeyStream()
+    db.createReadStream()
       .on('data', function (data) {
-        save(data, 'false')
-        console.log('Reset %s.', data);
+        if (data.value === 'true') {
+          save(data.key, 'false')
+          console.log('Reset %s.', data.key);
+        }
       })
   }
 }
@@ -97,10 +99,12 @@ function removeTask (task) {
 }
 
 function wipeTasks () {
-  db.createKeyStream()
+  db.createReadStream()
     .on('data', function(data) {
-      save(data, 'true')
-      console.log('Wiped %s.', data);
+      if (data.value === 'false') {
+        save(data.key, 'true')
+        console.log('Wiped %s.', data.key);
+      }
     })
     .on('close', function() {
       list()

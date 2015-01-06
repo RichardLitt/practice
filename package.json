@@ -1,6 +1,6 @@
 {
   "name": "practice",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "bin": "bin/index.js",
   "description":
     "A simple task manager and to do list using the console and leveldb",
