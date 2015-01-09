@@ -32,7 +32,7 @@ returned output.
   -i, --input Specifies different input file
   -d, --done  Set value to true. If multiple times, sets all params to true.
   -n, --new   Create new item in the list. 
-  -e, --erase Remove the task from the list permanently
+  -e, --erase Remove the task from the list permanently. Use arg 'all' to delete everything.
   -w, --wipe  Mark all values as true,
   -l, --list  Show all values
 ```

@@ -92,10 +92,31 @@ function newTask (task) {
 }
 
 function removeTask (task) {
-  db.del(task, function (err) {
-    if (err) { console.log('Failed to delete', err) }
-    else { console.log('Deleted %s.', task); }
-  })
+  if (task === 'all') {
+    db.get('all', function(err, value) {
+      if (err) {
+        if (err.notFound) {
+          db.createKeyStream()
+            .on('data', function(key) {
+              db.del(key, function(err) {
+                if (err) { console.log('Failed to delete', err) }
+                else { console.log('Deleted %s.', key) }
+              })
+            })
+            .on('end', function() {
+              db.close()
+            })
+
+        }
+      }
+    })
+  } else {
+    db.del(task, function (err) {
+      if (err) { console.log('Failed to delete', err) }
+      else { console.log('Deleted %s.', task) }
+      db.close()
+    })
+  }
 }
 
 function wipeTasks () {
