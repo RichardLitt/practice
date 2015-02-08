@@ -12,9 +12,6 @@ since I love a clean desktop, I print out these tasks (and these only) on the
 desktop using GeekTool and remove them as I complete them. I reset it daily.
 This way I am constantly reminded to practice.
 
-The bash file is there because GeekTool is stupid and won't load your PATH
-unless you tell it to. Ignore it if you're not using Geektool.
-
 ### Install
 
 `npm install -g practice`
