@@ -1,9 +1,8 @@
 {
   "name": "practice",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "bin": "bin/index.js",
-  "description":
-    "A simple task manager and to do list using the console and leveldb",
+  "description": "A simple task manager and to do list using the console and leveldb",
   "license": "MIT",
   "repository": {
     "type": "git",
