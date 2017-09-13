@@ -1,6 +1,8 @@
 Practice 
 ========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/RichardLitt/practice.svg)](https://greenkeeper.io/)
+
 > “Practice makes the master.” - Patrick Rothfuss, _The Name of the Wind_
 
 This is way of storing and using a  daily to do list, which will display what hasn't been done since the last reset in the console. It uses leveldb for storage.
